@@ -151,7 +151,7 @@
             </div>
             <br>
             <div class="w3-container w3-card w3-white w3-round w3-margin" id="divInput"><br>
-                <h6>Lengkapi data berikut ini :</h6>
+                <h6>Lengkapi data berikut ini!</h6>
                 <hr>
                 <div class="container">
                     <form action="#" id="formInput">
