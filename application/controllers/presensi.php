@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class presensi extends CI_Controller {
+class Presensi extends CI_Controller {
 
 	/**
 	 * Index Page for this controller.
@@ -23,31 +23,47 @@ class presensi extends CI_Controller {
 	 parent::__construct();
 	 	$this->load->helper('url');
 	 	$this->load->model('M_presensi');
-	 	$this->load->model('M_hadir');
 	 	$this->load->model('M_auth');
-	 	// if(!$this->M_auth->current_user()){
-		// 	redirect('auth/login');
-		// }
-	 }
+	 	$this->load->model('M_hadir');
+	 	if(!$this->M_auth->current_user()){
+			redirect('auth/login');
+		}
+	}
+
+	public function submit()
+	{
+		$hasil['sukses'] = false;
+		$hasil['error'] = "Ada Error terjadi";
+		return json_encode($hasil);
+		//return "Aku di klik";
+	}
  
 	function index(){
 		$data['presensi'] = $this->M_presensi->get_data();
-        $data['test'] = 'test';
-		$this->load->view('v_header.php',$data);
-		$this->load->view('v_index.php',$data);
-		// $this->load->view('v_login.php');
+		// $this->load->view('v_header.php',$data);
+		// $this->load->view('v_index.php',$data);
+		//$this->load->view('v_login.php');
+		$this->load->view('vw_header.php',$data);
+		$this->load->view('vw_daftarRapat.php',$data);
+
 	}
 
 	function daftarRapat(){
 		$data['presensi'] = $this->M_presensi->get_data();
-		$this->load->view('v_header.php',$data);
-		$this->load->view('v_daftarRapat.php',$data);
+		$this->load->view('vw_header.php',$data);
+		$this->load->view('vw_daftarRapat.php',$data);
 	}
 
 	function daftarHadir(){
 		$data['dHadir'] = $this->M_hadir->get_hadir();
 		$data['presensi'] = $this->M_presensi->get_data();
-		$this->load->view('v_header.php',$data);
-		$this->load->view('v_daftarHadir.php',$data);
+		$this->load->view('vw_header.php',$data);
+		$this->load->view('vw_daftarHadir.php',$data);
 	}
+
+	// function get_hadir(){
+	// 	$dHadir = $this->M_hadir->get_hadir();
+	// 	return json_encode($dHadir);
+
+	// }
 }

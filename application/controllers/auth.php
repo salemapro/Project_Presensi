@@ -1,51 +1,66 @@
 <?php
-    defined('BASEPATH') OR exit ('No direct script access allowed');
+defined('BASEPATH') OR exit('No direct script access allowed');
 
-    class Auth extends CI_Controller{
-        function __construct()
-        {
-            parent::__construct();
-                $this->load->helper('url');
-                $this->load->model('M_auth');
-        }
+class Auth extends CI_Controller {
 
-        public function index(){
-            show_404();
-        }
+	/**
+	 * Index Page for this controller.
+	 *
+	 * Maps to the following URL
+	 * 		http://example.com/index.php/welcome
+	 *	- or -
+	 * 		http://example.com/index.php/welcome/index
+	 *	- or -
+	 * Since this controller is set as the default controller in
+	 * config/routes.php, it's displayed at http://example.com/
+	 *
+	 * So any other public methods not prefixed with an underscore will
+	 * map to /index.php/welcome/<method_name>
+	 * @see https://codeigniter.com/userguide3/general/urls.html
+	 */
 
-        public function login()
-        {
-            $this->load->library('form_validation');
+	function __construct(){
+	 parent::__construct();
+	 	$this->load->helper('url');
+	 	$this->load->model('M_auth');
+	 	$this->load->model('M_presensi');
+	 }
+ 
+	public function index()
+	{
+		show_404();
+	}
 
-            $rules = $this->M_auth->rules();
-            $this->form_validation->set_rules($rules);
+	public function login()
+	{
+		$data['presensi'] = $this->M_presensi->get_data();
+		$this->load->library('form_validation');
 
-            if($this->form_validation->run() == FALSE){
-                return $this->load->view('v_login');
-            }
+		$rules = $this->M_auth->rules();
+		$this->form_validation->set_rules($rules);
 
-            $username = $this->input->post('username');
-		    $password = $this->input->post('password');
+		if($this->form_validation->run() == FALSE){
+			return $this->load->view('vw_index', $data);
+		}
 
-            if($this->M_auth->login($username, $password)){
-                redirect('presensi');
-            } else {
-                $this->session->set_flashdata('message_login_error', 'Login Gagal, pastikan username dan password benar!');
-            }
+		$username = $this->input->post('username');
+		$password = $this->input->post('password');
 
-            $this->load->view('v_login');
-        }
+		if($this->M_auth->login($username, $password)){
+			redirect('presensi');
+		} else {
+			$this->session->set_flashdata('message_login_error', 'Login Gagal, pastikan username dan password benar!');
+		}
 
-        public function logout()
-	    {
-            $this->load->model('M_auth');
-            $this->M_auth->logout();
-            redirect(site_url());
-	    }
+		$this->load->view('vw_index.php', $data);
+	}
 
-        function show(){
-            // $data['auth'] = $this->M_auth->get_data();
-            $this->load->view('v_login.php');
-        }
-    }
-?>
+	public function logout()
+	{
+		$this->load->model('M_auth');
+		$this->M_auth->logout();
+		redirect(site_url());
+	}
+	
+
+}

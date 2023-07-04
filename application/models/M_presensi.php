@@ -7,7 +7,7 @@
         function get_data()
         {
             //return $this->db->get('tbl_daftarrapat')->result_array;
-            $query = $this->db->query("select * from tbl_daftarrapat");
+            $query = $this->db->query("SELECT * from tbl_daftarrapat");
             return $query->result();
             //print_r($query);
             //die();
